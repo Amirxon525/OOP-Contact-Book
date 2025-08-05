@@ -66,13 +66,45 @@ class ContactBook:
         self.console.print(table)
 
     def remove_contact(self):
-        pass
+        self.print_contacts()
+
+        contact_id = input("Contact ID: ")
+        if self.db.remove_contact(contact_id):
+            print("contact ochirildi")
+        else:
+            print("bunday contact mavjud emas")
+
 
     def update_contact(self):
-        pass
+        self.print_contacts()
+
+        contact_id = input("Contact ID: ")
+        contact = self.db.get_contact(contact_id)
+        if contact:
+            name = input("Name: ").strip().title()
+            phone = input("Phone: ").strip()
+            email = input("Email: ").strip()
+
+            data = {
+                'name': name,
+                'phone': phone,
+                'email': email
+            }
+            self.db.update_contact(contact, data)
+            print("Contact Update qilindi.")
+        else:
+            print("Bunday ID dagi contact mavjud emas.")
 
     def search_contact(self):
-        pass
+        search = input("Search: ").strip().lower()
+        
+        table = Table(title="[bold blue]Found Contacts Table")
+
+        table.add_column("ID", style="cyan", no_wrap=True)
+        table.add_column("Name", style="magenta")
+        table.add_column("Phone", justify="right", style="green")
+        table.add_column("Email", style="blue")
+
 
     def run(self):
         print("salom, Contact Book Projectga Xush Kelibsiz!")
@@ -84,3 +116,14 @@ class ContactBook:
                 self.add_contact()
             elif choice == '2':
                 self.print_contacts()
+            elif choice == '3':
+                self.search_contact()
+            elif choice == '4':
+                self.update_contact()
+            elif choice == '5':
+                self.remove_contact()
+            elif choice == '6':
+                self.quit()
+            else:
+                print("xato choice")
+
